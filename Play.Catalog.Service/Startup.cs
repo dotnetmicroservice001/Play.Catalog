@@ -44,14 +44,14 @@ namespace Play.Catalog.Service
                 });
            }); 
            services.AddMassTransitHostedService();
-            services.AddControllers(opts =>
-            {
+           services.AddControllers(opts =>
+           {
                 opts.SuppressAsyncSuffixInActionNames = false;
-            });
-            services.AddSwaggerGen(c =>
-            {
+           });
+           services.AddSwaggerGen(c =>
+           {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Play.Catalog.Service", Version = "v1" });
-            });
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
