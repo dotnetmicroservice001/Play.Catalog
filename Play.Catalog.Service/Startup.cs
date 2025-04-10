@@ -1,4 +1,5 @@
 
+using MassTransit.MultiBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
@@ -31,7 +32,6 @@ namespace Play.Catalog.Service
            _serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
            services.AddMongo().AddMongoRepository<Item>("items");
            
-
             services.AddControllers(opts =>
             {
                 opts.SuppressAsyncSuffixInActionNames = false;
