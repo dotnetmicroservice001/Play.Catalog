@@ -16,12 +16,13 @@ namespace Play.Catalog.Service.Controllers;
 
 [ApiController]
 [Route("items")]
-[Authorize]
+[Authorize(Roles = AdminRole)]
 public class ItemsController : ControllerBase
 {
     private readonly IRepository<Item> _itemsRepository ;
     private readonly IPublishEndpoint _publishEndpoint;
     
+    private const string AdminRole = "Admin";
 
     public ItemsController( IRepository<Item> itemsRepository, IPublishEndpoint publishEndpoint )
     {
