@@ -65,7 +65,11 @@ public class ItemsController : ControllerBase
             CreatedDate = DateTimeOffset.UtcNow
         };
         await _itemsRepository.CreateAsync(item); 
-        await _publishEndpoint.Publish(new CatalogItemCreated(item.Id, item.Name, item.Description));
+        await _publishEndpoint.Publish(new CatalogItemCreated(
+            item.Id, 
+            item.Name, 
+            item.Description,
+            item.Price));
         return CreatedAtAction( nameof(GetByIdAsync), new { id = item.Id }, item);
     }
     
@@ -85,7 +89,8 @@ public class ItemsController : ControllerBase
         existingItem.Price = updateItemDto.Price;
         await _itemsRepository.UpdateAsync(existingItem);
         await _publishEndpoint.Publish(new CatalogItemUpdated(
-            existingItem.Id, existingItem.Name, existingItem.Description));
+            existingItem.Id, existingItem.Name, existingItem.Description
+            , existingItem.Price));
         return NoContent();
     }
     
