@@ -50,7 +50,7 @@ namespace Play.Catalog.Service
                    policy.RequireRole("Admin");
                    policy.RequireClaim("scope", 
                        "catalog.writeaccess",  
-                       "catalog.writeaccess");
+                       "catalog.fullaccess");
                });  
                
            });
