@@ -2,6 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <ProjectDescription>
+            Contains immutable message contracts for the Play Economy Catalog microservice.
+            These contracts are used to publish and consume catalog-related events such as
+            item creation, updates, and deletions across distributed services.
+        </ProjectDescription>
     </PropertyGroup>
 
 </Project>
