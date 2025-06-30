@@ -9,7 +9,7 @@ version="1.0.2"
 owner="dotnetmicroservice001"
 gh_pat="[YOUR_PERSONAL_ACCESS_TOKEN]"
 
-dotnet pack Play.Catalog.Contracts --configuration Release \
+dotnet pack src/Play.Catalog.Contracts --configuration Release \
   -p:PackageVersion="$version" \
   -p:RepositoryUrl="https://github.com/$owner/Play.Catalog" \
   -o ../Packages
