@@ -22,13 +22,13 @@ dotnet nuget push ../Packages/Play.Catalog.Contracts.$version.nupkg --api-key $g
 export version="1.0.3"
 export GH_OWNER=dotnetmicroservice001
 export GH_PAT="ghp_YourRealPATHere"
-docker build --secret id=GH_OWNER --secret id=GH_PAT -t play.catalog:$version .
+export acrname="playeconomy01acr"
+docker build --secret id=GH_OWNER --secret id=GH_PAT -t "$acrname.azurecr.io/play.catalog:$version" .
 ```
 
 ## Run Docker Image
 ```bash 
 export version="1.0.3"
-export adminPass="password here"
 export cosmosDbConnString="conn string here"
 export serviceBusConnString="conn string here"
 docker run -it --rm \
@@ -38,6 +38,12 @@ docker run -it --rm \
   -e ServiceBusSettings__ConnectionString=$serviceBusConnString \
   -e ServiceSettings__MessageBroker="SERVICEBUS" \
   play.catalog:$version
+```
+
+## Publishing Docker Image
+```bash 
+az acr login --name $acrname
+docker push "$acrname.azurecr.io/play.catalog:$version"
 ```
 
 ---
