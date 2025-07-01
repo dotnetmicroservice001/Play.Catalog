@@ -1,8 +1,9 @@
 
+using System;
+using GreenPipes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,7 +33,8 @@ namespace Play.Catalog.Service
            _serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
            services.AddMongo()
                .AddMongoRepository<Item>("items")
-               .AddMassTransitWithRabbitMQ()
+               .AddMassTransitWithMessageBroker(Configuration,
+                   retryConfigurator => { retryConfigurator.Interval(3, TimeSpan.FromSeconds(5)); })
                .AddJwtBearer();
 
 
