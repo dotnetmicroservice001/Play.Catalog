@@ -44,10 +44,11 @@ docker run -it --rm \
 az acr login --name $acrname
 docker push "$acrname.azurecr.io/play.catalog:$version"
 ```
+
 ## 🐳 Build & Push Docker Image (M2 Mac + AKS Compatible)
 Build a multi-architecture image (ARM64 for local M2 Mac, AMD64 for AKS) and push to ACR:
 ```bash
-version="1.0.3"
+version="1.0.4"
 export GH_OWNER=dotnetmicroservice001
 export GH_PAT="ghp_YourRealPATHere"
 export acrname="playeconomy01acr"
