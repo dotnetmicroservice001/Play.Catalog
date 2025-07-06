@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: catalog-serviceaccount
+  annotations:
+    azure.workload.identity/client-id: 3f3ffa52-098b-4fd1-8446-b03650f89f39
+  labels:
+    azure.workload.identity/use: "true"
+  

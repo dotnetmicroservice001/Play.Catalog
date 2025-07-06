@@ -60,11 +60,19 @@ docker buildx build \
   --push .
 ```
 
+## Create Kubernetes namespace
+```bash 
+export namespace="catalog"
+kubectl create namespace $namespace 
+```
+## Create the Kubernetes Pod
+```bash
+kubectl apply -f ./kubernetes/${namespace}.yaml -n "$namespace"
+```
 
 ## Creating Azure Managed Identity and granting it access to Key Vault Store
 ```bash
 export appname=playeconomy-01
-export namespace="catalog"
 az identity create --resource-group $appname --name $namespace 
 
 export IDENTITY_CLIENT_ID=$(az identity show -g "$appname" -n "$namespace" --query clientId -o tsv)
@@ -74,7 +82,8 @@ az role assignment create \
   --assignee "$IDENTITY_CLIENT_ID" \
   --role "Key Vault Secrets User" \
   --scope "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/$appname/providers/Microsoft.KeyVault/vaults/$appname"
-
 ```
+
+
 
 ---
