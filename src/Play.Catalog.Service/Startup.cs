@@ -65,6 +65,7 @@ namespace Play.Catalog.Service
            {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Play.Catalog.Service", Version = "v1" });
            });
+           
            services.AddHealthChecks().AddMongoDb();
 
         }

@@ -66,10 +66,6 @@ docker buildx build \
 export namespace="catalog"
 kubectl create namespace $namespace 
 ```
-## Create the Kubernetes Pod
-```bash
-kubectl apply -f ./kubernetes/${namespace}.yaml -n "$namespace"
-```
 
 ## Creating Azure Managed Identity and granting it access to Key Vault Store
 ```bash
@@ -91,4 +87,13 @@ export AKS_OIDC_ISSUER="$(az aks show -n $appname -g $appname --query "oidcIssue
 az identity federated-credential create --name ${namespace} --identity-name "${namespace}" --resource-group "${appname}" --issuer "${AKS_OIDC_ISSUER}" --subject system:serviceaccount:"${namespace}":"${namespace}-serviceaccount" --audience api://AzureADTokenExchange
 ```
 
+## install helm chart
+```bash 
+helmUser="00000000-0000-0000-0000-000000000000"
+helmPassword=$(az acr login --name playeconomy01acr --expose-token --output tsv --query accessToken)
+helm registry login playeconomy01acr.azurecr.io --username $helmUser --password $helmPassword 
+
+chartVersion="0.1.0"
+helm upgrade "$namespace-service" oci://playeconomy01acr.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install
+```
 ---
