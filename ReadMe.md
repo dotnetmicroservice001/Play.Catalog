@@ -5,7 +5,6 @@ This microservice is part of the **Play Economy** system and is responsible for 
 
 ## Create and Publish Package 
 ```bash
-version="1.0.2"
 owner="dotnetmicroservice001"
 gh_pat="[YOUR_PERSONAL_ACCESS_TOKEN]"
 
@@ -19,7 +18,6 @@ dotnet nuget push ../Packages/Play.Catalog.Contracts.$version.nupkg --api-key $g
 ```
 ## Build a Docker Image
 ```bash
-export version="1.0.3"
 export GH_OWNER=dotnetmicroservice001
 export GH_PAT="ghp_YourRealPATHere"
 export acrname="playeconomy01acr"
@@ -48,7 +46,7 @@ docker push "$appname.azurecr.io/play.catalog:$version"
 ## 🐳 Build & Push Docker Image (M2 Mac + AKS Compatible)
 Build a multi-architecture image (ARM64 for local M2 Mac, AMD64 for AKS) and push to ACR:
 ```bash
-version="1.0.4"
+version="1.0.5"
 export GH_OWNER=dotnetmicroservice001
 export GH_PAT="ghp_YourRealPATHere"
 export appname="playeconomyapp"
@@ -90,10 +88,10 @@ az identity federated-credential create --name ${namespace} --identity-name "${n
 ## install helm chart
 ```bash 
 helmUser="00000000-0000-0000-0000-000000000000"
-helmPassword=$(az acr login --name playeconomy01acr --expose-token --output tsv --query accessToken)
-helm registry login playeconomy01acr.azurecr.io --username $helmUser --password $helmPassword 
+helmPassword=$(az acr login --name $appname --expose-token --output tsv --query accessToken)
+helm registry login $appname.azurecr.io --username $helmUser --password $helmPassword 
 
 chartVersion="0.1.0"
-helm upgrade "$namespace-service" oci://playeconomy01acr.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install
+helm upgrade "$namespace-service" oci://$appname.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install
 ```
 ---

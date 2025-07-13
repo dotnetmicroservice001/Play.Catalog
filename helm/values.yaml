@@ -1,15 +1,14 @@
 microserviceName: "catalog"
 
 image:
-  repository: playeconomy01acr.azurecr.io/play.catalog
-  tag : 1.0.4
+  repository: playeconomyapp.azurecr.io/play.catalog
+  tag : 1.0.5
 
 envVariables:
-  IdentitySettings__PathBase: /catalog-svc
-  ServiceSettings__Authority: https://playeconomy-01.westus.cloudapp.azure.com/identity-svc
+  ServiceSettings__Authority: https://playeconomyapp.westus.cloudapp.azure.com/identity-svc
 
 container:
   port: 5000
 
-identityClientId: 3f3ffa52-098b-4fd1-8446-b03650f89f39
+identityClientId: 02e4242a-a5bc-4264-9ba0-fb7b589bec05
     
