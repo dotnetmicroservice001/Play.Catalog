@@ -95,3 +95,8 @@ chartVersion="0.1.0"
 helm upgrade "$namespace-service" oci://$appname.azurecr.io/helm/microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install
 ```
 ---
+## Required repository secrets for github workflow
+GH_PAT -> profile - settings - developer settings - PAT with repo and read access
+AZURE_CLIENT_ID -> from ad app registration
+AZURE_SUBSCIPRTION_ID -> from azure subscription portal
+AZURE_TENANT_ID -> from microsoft entra id
