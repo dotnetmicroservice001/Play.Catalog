@@ -1,7 +1,6 @@
 
 using System;
-using GreenPipes;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +13,7 @@ using Play.Common.Identity;
 using Play.Common.Logging;
 using Play.Common.MassTransit;
 using Play.Common.MongoDB;
+using Play.Common.OpenTelemetry;
 using Play.Common.Settings;
 
 namespace Play.Catalog.Service
@@ -68,7 +68,8 @@ namespace Play.Catalog.Service
            });
            
            services.AddHealthChecks().AddMongoDb();
-           services.AddSeqLogging(Configuration);
+           services.AddSeqLogging(Configuration)
+               .AddTracing(Configuration);
 
         }
 
