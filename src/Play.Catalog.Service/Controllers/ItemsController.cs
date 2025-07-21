@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Play.Catalog.Service.Dtos;
 using Play.Catalog.Service.Entities;
 using Play.Common; 
 using Play.Catalog.Contracts;
+using Play.Common.Settings;
 
 
 namespace Play.Catalog.Service.Controllers;
@@ -20,13 +23,21 @@ public class ItemsController : ControllerBase
 {
     private readonly IRepository<Item> _itemsRepository ;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly Counter<int> _itemsUpdatedCounter;
     
     private const string AdminRole = "Admin";
 
-    public ItemsController( IRepository<Item> itemsRepository, IPublishEndpoint publishEndpoint )
+    public ItemsController( 
+        IRepository<Item> itemsRepository,
+        IPublishEndpoint publishEndpoint,
+        IConfiguration configuration)
     {
         _itemsRepository = itemsRepository;
        _publishEndpoint = publishEndpoint;
+       
+       var settings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
+       Meter meter = new(settings.ServiceName);
+       _itemsUpdatedCounter = meter.CreateCounter<int>("ItemsUpdated");
         
     }
     
@@ -88,6 +99,8 @@ public class ItemsController : ControllerBase
         existingItem.Description = updateItemDto.Description;
         existingItem.Price = updateItemDto.Price;
         await _itemsRepository.UpdateAsync(existingItem);
+        _itemsUpdatedCounter.Add(1, KeyValuePair.Create<string, object>(existingItem.Name, existingItem.Id));
+        
         await _publishEndpoint.Publish(new CatalogItemUpdated(
             existingItem.Id, existingItem.Name, existingItem.Description
             , existingItem.Price));

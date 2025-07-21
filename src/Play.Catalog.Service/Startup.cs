@@ -69,7 +69,8 @@ namespace Play.Catalog.Service
            
            services.AddHealthChecks().AddMongoDb();
            services.AddSeqLogging(Configuration)
-               .AddTracing(Configuration);
+               .AddTracing(Configuration)
+               .AddMetrics(Configuration);
 
         }
 
@@ -88,7 +89,8 @@ namespace Play.Catalog.Service
                         .AllowAnyMethod();
                 });
             }
-
+            
+            app.UseOpenTelemetryPrometheusScrapingEndpoint();
             app.UseHttpsRedirection();
 
             app.UseRouting();
