@@ -2,7 +2,7 @@ microserviceName: "catalog"
 
 image:
   repository: playeconomyapp.azurecr.io/play.catalog
-  tag : 1.0.5
+  tag : 1.0.10
 
 envVariables:
   ServiceSettings__Authority: https://playeconomyapp.westus.cloudapp.azure.com/identity-svc
