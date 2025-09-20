@@ -1,14 +1,14 @@
 microserviceName: "catalog"
 
 image:
-  repository: playeconomyapp.azurecr.io/play.catalog
-  tag : 1.0.10
+  repository: acrpfpos.azurecr.io/play.catalog
+  tag : 1.0.0
 
 envVariables:
-  ServiceSettings__Authority: https://playeconomyapp.westus.cloudapp.azure.com/identity-svc
+  ServiceSettings__Authority: https://gameplayeconomy.com/identity-svc
 
 container:
   port: 5000
 
-identityClientId: 02e4242a-a5bc-4264-9ba0-fb7b589bec05
+identityClientId: e5986e8a-4817-40fc-b961-333d51586bd0
     
