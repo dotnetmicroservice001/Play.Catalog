@@ -6,7 +6,8 @@ image:
 
 envVariables:
   ServiceSettings__Authority: https://gameplayeconomy.com/identity-svc
-
+  ASPNETCORE_URLS: "http://0.0.0.0:5000"
+  
 container:
   port: 5000
 
