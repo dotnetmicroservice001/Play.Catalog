@@ -93,7 +93,7 @@ helmUser="00000000-0000-0000-0000-000000000000"
 helmPassword=$(az acr login --name $ACR --expose-token --output tsv --query accessToken)
 helm registry login $ACR.azurecr.io --username $helmUser --password $helmPassword 
 
-chartVersion="0.1.0"
+chartVersion="0.1.2"
 helm upgrade "pe-$namespace-service" oci://$ACR.azurecr.io/helm/playflow-microservice --version $chartVersion -f ./helm/values.yaml -n $namespace --install
 ```
 ---
