@@ -1,5 +1,9 @@
 microserviceName: "catalog"
 
+strategy:
+  type: Recreate
+  rollingUpdate: null
+
 image:
   repository: acrpfpos.azurecr.io/play.catalog
   tag : 1.0.0
@@ -10,6 +14,14 @@ envVariables:
   
 container:
   port: 5000
+
+resources:
+  requests:
+    memory: "180Mi"
+    cpu: "20m"
+  limits:
+    memory: "256Mi"
+    cpu: "100m"
 
 identityClientId: e5986e8a-4817-40fc-b961-333d51586bd0
     
