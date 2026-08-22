@@ -23,22 +23,26 @@ public class ItemsController : ControllerBase
 {
     private readonly IRepository<Item> _itemsRepository ;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly Counter<int> _itemsCreatedCounter;
     private readonly Counter<int> _itemsUpdatedCounter;
-    
+    private readonly Counter<int> _itemsDeletedCounter;
+
     private const string AdminRole = "Admin";
 
-    public ItemsController( 
+    public ItemsController(
         IRepository<Item> itemsRepository,
         IPublishEndpoint publishEndpoint,
         IConfiguration configuration)
     {
         _itemsRepository = itemsRepository;
        _publishEndpoint = publishEndpoint;
-       
+
        var settings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
        Meter meter = new(settings.ServiceName);
+       _itemsCreatedCounter = meter.CreateCounter<int>("ItemsCreated");
        _itemsUpdatedCounter = meter.CreateCounter<int>("ItemsUpdated");
-        
+       _itemsDeletedCounter = meter.CreateCounter<int>("ItemsDeleted");
+
     }
     
     [HttpGet]
@@ -75,10 +79,12 @@ public class ItemsController : ControllerBase
             Price = createItemDto.Price, 
             CreatedDate = DateTimeOffset.UtcNow
         };
-        await _itemsRepository.CreateAsync(item); 
+        await _itemsRepository.CreateAsync(item);
+        _itemsCreatedCounter.Add(1, KeyValuePair.Create<string, object>("ItemId", item.Id));
+
         await _publishEndpoint.Publish(new CatalogItemCreated(
-            item.Id, 
-            item.Name, 
+            item.Id,
+            item.Name,
             item.Description,
             item.Price));
         return CreatedAtAction( nameof(GetByIdAsync), new { id = item.Id }, item);
@@ -99,7 +105,7 @@ public class ItemsController : ControllerBase
         existingItem.Description = updateItemDto.Description;
         existingItem.Price = updateItemDto.Price;
         await _itemsRepository.UpdateAsync(existingItem);
-        _itemsUpdatedCounter.Add(1, KeyValuePair.Create<string, object>(existingItem.Name, existingItem.Id));
+        _itemsUpdatedCounter.Add(1, KeyValuePair.Create<string, object>("ItemId", existingItem.Id));
         
         await _publishEndpoint.Publish(new CatalogItemUpdated(
             existingItem.Id, existingItem.Name, existingItem.Description
@@ -118,6 +124,7 @@ public class ItemsController : ControllerBase
             return NotFound();
         }
         await _itemsRepository.DeleteAsync(item.Id);
+        _itemsDeletedCounter.Add(1, KeyValuePair.Create<string, object>("ItemId", item.Id));
         await _publishEndpoint.Publish(new CatalogItemDeleted(item.Id));
         return NoContent();
     }
