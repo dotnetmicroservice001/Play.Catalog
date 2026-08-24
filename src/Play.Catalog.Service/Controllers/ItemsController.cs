@@ -73,11 +73,14 @@ public class ItemsController : ControllerBase
     public async Task<ActionResult<ItemDto>> PostAsync(CreateItemDto createItemDto)
     {
         var item = new Item
-        { 
+        {
             Name = createItemDto.Name,
             Description = createItemDto.Description,
-            Price = createItemDto.Price, 
-            CreatedDate = DateTimeOffset.UtcNow
+            Price = createItemDto.Price,
+            CreatedDate = DateTimeOffset.UtcNow,
+            Category = createItemDto.Category,
+            ImageUrl = createItemDto.ImageUrl,
+            Rarity = createItemDto.Rarity
         };
         await _itemsRepository.CreateAsync(item);
         _itemsCreatedCounter.Add(1, KeyValuePair.Create<string, object>("ItemId", item.Id));
@@ -86,7 +89,10 @@ public class ItemsController : ControllerBase
             item.Id,
             item.Name,
             item.Description,
-            item.Price));
+            item.Price,
+            item.Category,
+            item.ImageUrl,
+            item.Rarity));
         return CreatedAtAction( nameof(GetByIdAsync), new { id = item.Id }, item);
     }
     
@@ -104,12 +110,15 @@ public class ItemsController : ControllerBase
         existingItem.Name = updateItemDto.Name;
         existingItem.Description = updateItemDto.Description;
         existingItem.Price = updateItemDto.Price;
+        existingItem.Category = updateItemDto.Category;
+        existingItem.ImageUrl = updateItemDto.ImageUrl;
+        existingItem.Rarity = updateItemDto.Rarity;
         await _itemsRepository.UpdateAsync(existingItem);
         _itemsUpdatedCounter.Add(1, KeyValuePair.Create<string, object>("ItemId", existingItem.Id));
-        
+
         await _publishEndpoint.Publish(new CatalogItemUpdated(
-            existingItem.Id, existingItem.Name, existingItem.Description
-            , existingItem.Price));
+            existingItem.Id, existingItem.Name, existingItem.Description, existingItem.Price,
+            existingItem.Category, existingItem.ImageUrl, existingItem.Rarity));
         return NoContent();
     }
     

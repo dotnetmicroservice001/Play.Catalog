@@ -10,6 +10,9 @@ public class Item : IEntity
     public string Description { get; set; }
     public decimal Price { get; set; }
     public DateTimeOffset CreatedDate { get; set; }
+    public string Category { get; set; }
+    public string ImageUrl { get; set; }
+    public string Rarity { get; set; }
 
     public Item()
     {
